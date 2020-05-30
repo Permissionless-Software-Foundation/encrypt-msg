@@ -1,25 +1,14 @@
-This directory contains documentation on the design concepts behind this wallet.
-Bitcoin wallets all work slightly differently because of the trade-offs the
-designers made between convenience, privacy, and technology available at the
-time.
+# Documentation
 
-The bch-cli-wallet is optimized for privacy. As such, it does not combine UTXOs
-in the background, as many modern wallets do. Combining UTXOs is convenient for
-the user, but can de-anonymize them too.
+- The encrypted messaging used in this app is described in the [Media Sharing Protocol Specification](./media-sharing.md)
 
-For example, the [send command](../src/commands/send.js) will return this message:
+## YouTube Videos and Media
 
-`Could not find a UTXO big enough for this transaction.`
+There are several piece of media that have been generated around this app. They presented here in reverse chronological order (newest first).
 
-...if it cannot find a confirmed UTXO larger than the amount-to-send. It will not combine
-UTXOs to make the payment. The `send-all` command is the only command that will
-combine UTXOs, and it will warn the user when it does so.
 
-The [Roadmap](https://github.com/Bitcoin-com/bch-cli-wallet/issues/4) for this
-project includes integration to privacy technology like
-[CashShuffle](https://cashshuffle.com/) and
-[Consolidating CoinJoin](https://gist.github.com/christroutner/8d54597da652fe2affa5a7230664bc45), in
-order to combine UTXOs in a way that does not degrade the users privacy.
+- [Uncensorable Encrypted Messaging using BCH and IPFS](https://www.youtube.com/watch?v=RB9yt65y9s8) is a 'Part 2' YouTube video that extends the first video. It demonstrates the ability to use IPFS to move data off-chain, allow it to scale to any size, and possibly be self-destructing after a period of time. Showed off the [IPFS hosting service on FullStack.cash](https://ipfs.fullstack.cash).
 
-Additional information on the design decisions and trade-offs will be documented
-here and in the header of each commands .js file.
+- [CoinSpice.io Podcast](https://coinspice.io/news/podcast-bitcoin-cash-devs-prepper-mentality-makes-him-ready-for-cryptos-privacy-future/) discussed the political crackdown on end-to-end encryption via the EARN IT act, and how Bitcoin-based e2e encryption as a solution to government overreach.
+
+- [Encrypted Messages on the Blockchain](https://www.youtube.com/watch?v=JMrmteYmbmM&t=1s) was the first YouTube video that demonstrated the potential for using the same encryption behind the Bitcoin protocol to encrypt messages. This ultimately resulted in the [e2e encrypted messaging feature now available on member.cash](https://member.cash/#messages).
