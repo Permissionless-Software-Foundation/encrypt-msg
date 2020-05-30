@@ -1,3 +1,10 @@
+/*
+  The package-files command takes a message -m and a file -f as input arguments.
+  It will generate a JSON file with the message. It will combine both the
+  user-specified file and the JSON file into a zip file and write that zip
+  file to disk.
+*/
+
 "use strict"
 
 const fs = require("fs")

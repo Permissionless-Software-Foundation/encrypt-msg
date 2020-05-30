@@ -1,6 +1,7 @@
 /*
-  Uses Eliptic Curve encryption to encrypt a message and write it out to a
-  JSON object.
+  Uses Eliptic Curve encryption to encrypt a file with the public key associated
+  with a Bitcoin Cash address. It then uploads the encrypted file to an IPFS
+  host and signals that BCH address that it has a message waiting for it.
 */
 
 "use strict"
@@ -48,14 +49,6 @@ class EncryptMessage extends Command {
       // Validate input flags
       this.validateFlags(flags)
 
-      // Determine if this is a testnet wallet or a mainnet wallet.
-      if (flags.testnet) {
-        this.bchjs = new config.BCHLIB({
-          restURL: config.TESTNET_REST,
-          apiToken: config.JWT
-        })
-      }
-
       const {
         ipfsPaymentTxid,
         signalTxid,
@@ -76,19 +69,32 @@ class EncryptMessage extends Command {
   // Primary function that orchestrates the other subfunctions.
   async encryptAndSendMessage(flags) {
     try {
+      // Open the wallet data file.
+      const name = flags.name
+      const filename = `${__dirname}/../../wallets/${name}.json`
+      const walletInfo = this.appUtils.openWallet(filename)
+      walletInfo.name = name
+
+      // Determine if this is a testnet wallet or a mainnet wallet.
+      if (walletInfo.network === "testnet") {
+        _this.bchjs = new config.BCHLIB({
+          restURL: config.TESTNET_REST,
+          apiToken: config.JWT
+        })
+      }
+
       const toAddr = flags.address
 
       // Get the public key for the address from the blockchain.
       let pubKey
       try {
         pubKey = await this.getPubKey.queryBlockchain(flags)
-      } catch (err) {
-        if (!pubKey) throw new Error(`Could not find pubKey for target address`)
-      }
+      } catch (err) {}
+      if (!pubKey) throw new Error(`Could not find pubKey for target address`)
       console.log(`pubKey found: `, pubKey)
 
-      const fileName = _this.getFileNameFromPath(flags.file)
-      const filePath = `${_this.inputPath}/${fileName}.zip`
+      // const fileName = _this.getFileNameFromPath(flags.file)
+      const filePath = `${_this.inputPath}/${flags.file}`
 
       // Encrypt the message with the public key.
       const pubKeyBuf = Buffer.from(pubKey, "hex")
@@ -503,10 +509,20 @@ EncryptMessage.flags = {
 
   file: flags.string({
     char: "f",
-    description: "The file you want to encrypt and send. Wrap in double quotes."
+    description:
+      "The file you want to encrypt and send. The file should be placed in the 'packaged-files' directory."
   }),
 
-  name: flags.string({ char: "n", description: "Name of wallet" })
+  name: flags.string({
+    char: "n",
+    description: "Name of wallet to pay for BCH fees"
+  }),
+
+  message: flags.string({
+    char: "m",
+    description:
+      "The 'subject' of the message. Can't be too long, and will not be encrypted. Wrap in double quotes."
+  })
 }
 
 module.exports = EncryptMessage

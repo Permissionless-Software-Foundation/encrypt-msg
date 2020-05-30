@@ -11,36 +11,13 @@ messages.
 This app is also a fully-fledged HD wallet. It was forked from
 [slp-cli-wallet](https://github.com/christroutner/slp-cli-wallet).
 
-
 <!-- toc -->
 * [encrypt-msg](#encrypt-msg)
-* [NPM Usage](#npm-usage)
 * [Install Dev Environment](#install-dev-environment)
 * [Command Line Usage](#command-line-usage)
 * [Commands](#commands)
 <!-- tocstop -->
 
-
-# NPM Usage
-The [npm library](https://www.npmjs.com/package/slp-cli-wallet) can be included
-in your own app to instantly give it the ability to send and receive BCH transactions, including SLP tokens.
-Here is an example of how to include it in your own app. This example will generate
-a new HD wallet.
-
-```javascript
-// Instantiate the Create Wallet class from this library.
-const CreateWallet = require('slp-cli-wallet/src/commands/create-wallet')
-const createWallet = new CreateWallet()
-
-const walletFile = './wallet.json'
-
-async function makeNewWallet() {
-  const wallet = await createWallet.createWallet(walletFile)
-
-  console.log(`wallet: ${JSON.stringify(wallet,null,2)}`)
-}
-makeNewWallet()
-```
 
 # Install Dev Environment
 While this npm library can be used globally, the intended audience is developers
@@ -53,6 +30,15 @@ developer environment:
 
 Running the wallet this way, you can edit the behavior of the wallet
 by making changes to the code in the [src/commands](src/commands) directory.
+
+# How to Use
+There are a few main commands for sending and receiving message.
+- create-wallet - to create a wallet.
+- set-key - to generate a private/public key pair for encrypting messages.
+- package-files - zip up files and messages into a single file.
+- encrypt-message - encrypt the zip file, upload it to IPFS, and signal the BCH address that they have a message.
+- check-message - see if there are any messages for your address.
+- decrypt-message - download file from IPFS and decrypt it.
 
 # Command Line Usage
 <!-- usage -->
