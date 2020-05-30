@@ -57,42 +57,48 @@ by making changes to the code in the [src/commands](src/commands) directory.
 # Command Line Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g slp-cli-wallet
-$ slp-cli-wallet COMMAND
+$ npm install -g @chris.troutner/encrypt-msg
+$ encrypt-msg COMMAND
 running command...
-$ slp-cli-wallet (-v|--version|version)
-slp-cli-wallet/1.5.0 linux-x64 node-v10.19.0
-$ slp-cli-wallet --help [COMMAND]
+$ encrypt-msg (-v|--version|version)
+@chris.troutner/encrypt-msg/1.0.0 linux-x64 node-v12.16.1
+$ encrypt-msg --help [COMMAND]
 USAGE
-  $ slp-cli-wallet COMMAND
+  $ encrypt-msg COMMAND
 ...
 ```
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`slp-cli-wallet burn-tokens`](#slp-cli-wallet-burn-tokens)
-* [`slp-cli-wallet create-wallet`](#slp-cli-wallet-create-wallet)
-* [`slp-cli-wallet derivation`](#slp-cli-wallet-derivation)
-* [`slp-cli-wallet get-address`](#slp-cli-wallet-get-address)
-* [`slp-cli-wallet get-key`](#slp-cli-wallet-get-key)
-* [`slp-cli-wallet hello`](#slp-cli-wallet-hello)
-* [`slp-cli-wallet help [COMMAND]`](#slp-cli-wallet-help-command)
-* [`slp-cli-wallet list-wallets`](#slp-cli-wallet-list-wallets)
-* [`slp-cli-wallet remove-wallet`](#slp-cli-wallet-remove-wallet)
-* [`slp-cli-wallet send`](#slp-cli-wallet-send)
-* [`slp-cli-wallet send-all`](#slp-cli-wallet-send-all)
-* [`slp-cli-wallet send-tokens`](#slp-cli-wallet-send-tokens)
-* [`slp-cli-wallet sign-message`](#slp-cli-wallet-sign-message)
-* [`slp-cli-wallet sweep`](#slp-cli-wallet-sweep)
-* [`slp-cli-wallet update-balances`](#slp-cli-wallet-update-balances)
+* [`encrypt-msg burn-tokens`](#encrypt-msg-burn-tokens)
+* [`encrypt-msg create-wallet`](#encrypt-msg-create-wallet)
+* [`encrypt-msg decrypt-messages`](#encrypt-msg-decrypt-messages)
+* [`encrypt-msg derivation`](#encrypt-msg-derivation)
+* [`encrypt-msg encrypt-message`](#encrypt-msg-encrypt-message)
+* [`encrypt-msg get-address`](#encrypt-msg-get-address)
+* [`encrypt-msg get-key`](#encrypt-msg-get-key)
+* [`encrypt-msg get-private-key`](#encrypt-msg-get-private-key)
+* [`encrypt-msg get-pubkey`](#encrypt-msg-get-pubkey)
+* [`encrypt-msg hello`](#encrypt-msg-hello)
+* [`encrypt-msg help [COMMAND]`](#encrypt-msg-help-command)
+* [`encrypt-msg list-wallets`](#encrypt-msg-list-wallets)
+* [`encrypt-msg package-files`](#encrypt-msg-package-files)
+* [`encrypt-msg remove-wallet`](#encrypt-msg-remove-wallet)
+* [`encrypt-msg send`](#encrypt-msg-send)
+* [`encrypt-msg send-all`](#encrypt-msg-send-all)
+* [`encrypt-msg send-tokens`](#encrypt-msg-send-tokens)
+* [`encrypt-msg set-key`](#encrypt-msg-set-key)
+* [`encrypt-msg sign-message`](#encrypt-msg-sign-message)
+* [`encrypt-msg sweep`](#encrypt-msg-sweep)
+* [`encrypt-msg update-balances`](#encrypt-msg-update-balances)
 
-## `slp-cli-wallet burn-tokens`
+## `encrypt-msg burn-tokens`
 
 Burn SLP tokens.
 
 ```
 USAGE
-  $ slp-cli-wallet burn-tokens
+  $ encrypt-msg burn-tokens
 
 OPTIONS
   -n, --name=name        Name of wallet
@@ -100,30 +106,58 @@ OPTIONS
   -t, --tokenId=tokenId  Token ID
 ```
 
-_See code: [src/commands/burn-tokens.js](https://github.com/christroutner/bch-cli-wallet/blob/v1.5.0/src/commands/burn-tokens.js)_
+_See code: [src/commands/burn-tokens.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/burn-tokens.js)_
 
-## `slp-cli-wallet create-wallet`
+## `encrypt-msg create-wallet`
 
 Generate a new HD Wallet.
 
 ```
 USAGE
-  $ slp-cli-wallet create-wallet
+  $ encrypt-msg create-wallet
 
 OPTIONS
   -n, --name=name  Name of wallet
   -t, --testnet    Create a testnet wallet
 ```
 
-_See code: [src/commands/create-wallet.js](https://github.com/christroutner/bch-cli-wallet/blob/v1.5.0/src/commands/create-wallet.js)_
+_See code: [src/commands/create-wallet.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/create-wallet.js)_
 
-## `slp-cli-wallet derivation`
+## `encrypt-msg decrypt-messages`
+
+Retrieve and display the encrypted message sent to this wallet.
+
+```
+USAGE
+  $ encrypt-msg decrypt-messages
+
+OPTIONS
+  -n, --name=name  Name of wallet
+
+DESCRIPTION
+  Prototype command for retrieving, decrypting, and displaying a message using
+  the Bitcoin Cash blockchain and IPFS. This command does the following:
+
+  1. Get encryption data from the wallet.
+  2. Get transaction history for the messaging address.
+  3. Walk through the transactions, looking for an OP_RETURN in the TX.
+  4. If OP_RETURN matches the MSG format, download the message from IPFS.
+  5. Download, decrypt, and display the message.
+
+  It only does this for the first message found, then exists.
+
+  This is just a prototype.
+```
+
+_See code: [src/commands/decrypt-messages.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/decrypt-messages.js)_
+
+## `encrypt-msg derivation`
 
 Display or set the derivation path used by the wallet.
 
 ```
 USAGE
-  $ slp-cli-wallet derivation
+  $ encrypt-msg derivation
 
 OPTIONS
   -n, --name=name  name to print
@@ -141,44 +175,101 @@ DESCRIPTION
   Wallets use the 245 derivation path by default.
 ```
 
-_See code: [src/commands/derivation.js](https://github.com/christroutner/bch-cli-wallet/blob/v1.5.0/src/commands/derivation.js)_
+_See code: [src/commands/derivation.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/derivation.js)_
 
-## `slp-cli-wallet get-address`
+## `encrypt-msg encrypt-message`
+
+Encrypt a message for another BCH address.
+
+```
+USAGE
+  $ encrypt-msg encrypt-message
+
+OPTIONS
+  -a, --address=address  BCH address to find public key for
+  -f, --file=file        The file you want to encrypt and send. Wrap in double quotes.
+  -n, --name=name        Name of wallet
+
+DESCRIPTION
+  Given a BCH address, this command will do the following:
+  1. It will search the blockchain for the public key associated with the address.
+  2. It will encrypt the message with the public key.
+  3. It will upload the encrypted message to IPFS.
+  4. It will signal the address with an on-chain message.
+  5. It will pay for the IPFS and BCH messages with the address set using set-key.
+```
+
+_See code: [src/commands/encrypt-message.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/encrypt-message.js)_
+
+## `encrypt-msg get-address`
 
 Generate a new address to recieve BCH.
 
 ```
 USAGE
-  $ slp-cli-wallet get-address
+  $ encrypt-msg get-address
 
 OPTIONS
   -n, --name=name  Name of wallet
   -t, --token      Generate a simpledger: token address
 ```
 
-_See code: [src/commands/get-address.js](https://github.com/christroutner/bch-cli-wallet/blob/v1.5.0/src/commands/get-address.js)_
+_See code: [src/commands/get-address.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/get-address.js)_
 
-## `slp-cli-wallet get-key`
+## `encrypt-msg get-key`
 
-Generate a new private/public key pair.
+Get the encryption key info for the keypair set with set-key
 
 ```
 USAGE
-  $ slp-cli-wallet get-key
+  $ encrypt-msg get-key
 
 OPTIONS
   -n, --name=name  Name of wallet
 ```
 
-_See code: [src/commands/get-key.js](https://github.com/christroutner/bch-cli-wallet/blob/v1.5.0/src/commands/get-key.js)_
+_See code: [src/commands/get-key.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/get-key.js)_
 
-## `slp-cli-wallet hello`
+## `encrypt-msg get-private-key`
+
+Generate a new private/public key pair.
+
+```
+USAGE
+  $ encrypt-msg get-private-key
+
+OPTIONS
+  -n, --name=name  Name of wallet
+```
+
+_See code: [src/commands/get-private-key.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/get-private-key.js)_
+
+## `encrypt-msg get-pubkey`
+
+Search the blockchain for a public key associated with an address.
+
+```
+USAGE
+  $ encrypt-msg get-pubkey
+
+OPTIONS
+  -a, --address=address  BCH address to find public key for
+
+DESCRIPTION
+  Bitcoin Cash addresses are derived from a public key. If an address has made a
+  transaction, then the public key can be retrieved from the blockchain. This
+  public key is required in order to encrypt messages and files for that address.
+```
+
+_See code: [src/commands/get-pubkey.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/get-pubkey.js)_
+
+## `encrypt-msg hello`
 
 Example command from oclif
 
 ```
 USAGE
-  $ slp-cli-wallet hello
+  $ encrypt-msg hello
 
 OPTIONS
   -n, --name=name  name to print
@@ -188,15 +279,15 @@ DESCRIPTION
   Leaving it here for future reference in development.
 ```
 
-_See code: [src/commands/hello.js](https://github.com/christroutner/bch-cli-wallet/blob/v1.5.0/src/commands/hello.js)_
+_See code: [src/commands/hello.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/hello.js)_
 
-## `slp-cli-wallet help [COMMAND]`
+## `encrypt-msg help [COMMAND]`
 
-display help for slp-cli-wallet
+display help for encrypt-msg
 
 ```
 USAGE
-  $ slp-cli-wallet help [COMMAND]
+  $ encrypt-msg help [COMMAND]
 
 ARGUMENTS
   COMMAND  command to show help for
@@ -207,38 +298,58 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.1/src/commands/help.ts)_
 
-## `slp-cli-wallet list-wallets`
+## `encrypt-msg list-wallets`
 
 List existing wallets.
 
 ```
 USAGE
-  $ slp-cli-wallet list-wallets
+  $ encrypt-msg list-wallets
 ```
 
-_See code: [src/commands/list-wallets.js](https://github.com/christroutner/bch-cli-wallet/blob/v1.5.0/src/commands/list-wallets.js)_
+_See code: [src/commands/list-wallets.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/list-wallets.js)_
 
-## `slp-cli-wallet remove-wallet`
+## `encrypt-msg package-files`
+
+Zips file or directory.
+
+```
+USAGE
+  $ encrypt-msg package-files
+
+OPTIONS
+  -f, --file=file        Path of the file or directory
+  -m, --message=message  The message you want to encrypt and send. Wrap in double quotes.
+
+DESCRIPTION
+  1-Copies the file or the specified directory
+  2-Exports the message in a JSON file
+  3-Creates a ZIP file with both contents
+```
+
+_See code: [src/commands/package-files.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/package-files.js)_
+
+## `encrypt-msg remove-wallet`
 
 Remove an existing wallet.
 
 ```
 USAGE
-  $ slp-cli-wallet remove-wallet
+  $ encrypt-msg remove-wallet
 
 OPTIONS
   -n, --name=name  Name of wallet
 ```
 
-_See code: [src/commands/remove-wallet.js](https://github.com/christroutner/bch-cli-wallet/blob/v1.5.0/src/commands/remove-wallet.js)_
+_See code: [src/commands/remove-wallet.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/remove-wallet.js)_
 
-## `slp-cli-wallet send`
+## `encrypt-msg send`
 
 Send an amount of BCH
 
 ```
 USAGE
-  $ slp-cli-wallet send
+  $ encrypt-msg send
 
 OPTIONS
   -a, --sendAddr=sendAddr  Cash address to send to
@@ -246,15 +357,15 @@ OPTIONS
   -n, --name=name          Name of wallet
 ```
 
-_See code: [src/commands/send.js](https://github.com/christroutner/bch-cli-wallet/blob/v1.5.0/src/commands/send.js)_
+_See code: [src/commands/send.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/send.js)_
 
-## `slp-cli-wallet send-all`
+## `encrypt-msg send-all`
 
 Send all BCH in a wallet to another address. **Degrades Privacy**
 
 ```
 USAGE
-  $ slp-cli-wallet send-all
+  $ encrypt-msg send-all
 
 OPTIONS
   -a, --sendAddr=sendAddr  Cash address to send to
@@ -270,15 +381,15 @@ DESCRIPTION
   https://bit.ly/2TnhdVc
 ```
 
-_See code: [src/commands/send-all.js](https://github.com/christroutner/bch-cli-wallet/blob/v1.5.0/src/commands/send-all.js)_
+_See code: [src/commands/send-all.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/send-all.js)_
 
-## `slp-cli-wallet send-tokens`
+## `encrypt-msg send-tokens`
 
 Send SLP tokens.
 
 ```
 USAGE
-  $ slp-cli-wallet send-tokens
+  $ encrypt-msg send-tokens
 
 OPTIONS
   -a, --sendAddr=sendAddr  Cash or SimpleLedger address to send to
@@ -287,15 +398,29 @@ OPTIONS
   -t, --tokenId=tokenId    Token ID
 ```
 
-_See code: [src/commands/send-tokens.js](https://github.com/christroutner/bch-cli-wallet/blob/v1.5.0/src/commands/send-tokens.js)_
+_See code: [src/commands/send-tokens.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/send-tokens.js)_
 
-## `slp-cli-wallet sign-message`
+## `encrypt-msg set-key`
+
+Generate a new private/public key pair, to use for encryption.
+
+```
+USAGE
+  $ encrypt-msg set-key
+
+OPTIONS
+  -n, --name=name  Name of wallet
+```
+
+_See code: [src/commands/set-key.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/set-key.js)_
+
+## `encrypt-msg sign-message`
 
 Sign message
 
 ```
 USAGE
-  $ slp-cli-wallet sign-message
+  $ encrypt-msg sign-message
 
 OPTIONS
   -i, --sendAddrIndex=sendAddrIndex    Adress index
@@ -303,15 +428,15 @@ OPTIONS
   -s, --signTheMessage=signTheMessage  Sign message
 ```
 
-_See code: [src/commands/sign-message.js](https://github.com/christroutner/bch-cli-wallet/blob/v1.5.0/src/commands/sign-message.js)_
+_See code: [src/commands/sign-message.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/sign-message.js)_
 
-## `slp-cli-wallet sweep`
+## `encrypt-msg sweep`
 
 Sweep a private key
 
 ```
 USAGE
-  $ slp-cli-wallet sweep
+  $ encrypt-msg sweep
 
 OPTIONS
   -a, --address=address  Address to sweep funds to.
@@ -326,20 +451,20 @@ DESCRIPTION
   an error if a WIF contains more than one class of token.
 ```
 
-_See code: [src/commands/sweep.js](https://github.com/christroutner/bch-cli-wallet/blob/v1.5.0/src/commands/sweep.js)_
+_See code: [src/commands/sweep.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/sweep.js)_
 
-## `slp-cli-wallet update-balances`
+## `encrypt-msg update-balances`
 
 Poll the network and update the balances of the wallet.
 
 ```
 USAGE
-  $ slp-cli-wallet update-balances
+  $ encrypt-msg update-balances
 
 OPTIONS
   -i, --ignoreTokens  Ignore and burn tokens
   -n, --name=name     Name of wallet
 ```
 
-_See code: [src/commands/update-balances.js](https://github.com/christroutner/bch-cli-wallet/blob/v1.5.0/src/commands/update-balances.js)_
+_See code: [src/commands/update-balances.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/update-balances.js)_
 <!-- commandsstop -->

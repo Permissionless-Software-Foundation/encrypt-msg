@@ -1,5 +1,5 @@
 {
-  "name": "encrypt-msg",
+  "name": "@chris.troutner/encrypt-msg",
   "description": "A command-line app for sending and receiving e2e encrypted messages over the BCH blockchain.",
   "version": "1.0.0",
   "author": "Chris Troutner @christroutner",
