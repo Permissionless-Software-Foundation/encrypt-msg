@@ -16,7 +16,7 @@ messages.
 <!-- toc -->
 * [encrypt-msg](#encrypt-msg)
 * [Install Dev Environment](#install-dev-environment)
-* [How To Use](#how-to-use)
+* [How to Use](#how-to-use)
 * [Command Line Usage](#command-line-usage)
 * [Commands](#commands)
 <!-- tocstop -->
@@ -60,10 +60,11 @@ USAGE
 # Commands
 <!-- commands -->
 * [`encrypt-msg burn-tokens`](#encrypt-msg-burn-tokens)
+* [`encrypt-msg check-messages`](#encrypt-msg-check-messages)
 * [`encrypt-msg create-wallet`](#encrypt-msg-create-wallet)
 * [`encrypt-msg decrypt-messages`](#encrypt-msg-decrypt-messages)
 * [`encrypt-msg derivation`](#encrypt-msg-derivation)
-* [`encrypt-msg encrypt-message`](#encrypt-msg-encrypt-message)
+* [`encrypt-msg encrypt-send`](#encrypt-msg-encrypt-send)
 * [`encrypt-msg get-address`](#encrypt-msg-get-address)
 * [`encrypt-msg get-key`](#encrypt-msg-get-key)
 * [`encrypt-msg get-private-key`](#encrypt-msg-get-private-key)
@@ -71,7 +72,7 @@ USAGE
 * [`encrypt-msg hello`](#encrypt-msg-hello)
 * [`encrypt-msg help [COMMAND]`](#encrypt-msg-help-command)
 * [`encrypt-msg list-wallets`](#encrypt-msg-list-wallets)
-* [`encrypt-msg package-files`](#encrypt-msg-package-files)
+* [`encrypt-msg package-file`](#encrypt-msg-package-file)
 * [`encrypt-msg remove-wallet`](#encrypt-msg-remove-wallet)
 * [`encrypt-msg send`](#encrypt-msg-send)
 * [`encrypt-msg send-all`](#encrypt-msg-send-all)
@@ -96,6 +97,37 @@ OPTIONS
 ```
 
 _See code: [src/commands/burn-tokens.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/burn-tokens.js)_
+
+## `encrypt-msg check-messages`
+
+Check for messages on the blockchain
+
+```
+USAGE
+  $ encrypt-msg check-messages
+
+OPTIONS
+  -c, --check=check  Number of messages to check (default is 2)
+  -n, --name=name    Name of wallet
+
+DESCRIPTION
+  This command walks the BCH blockchain for the address set with the set-key command.
+  If it finds transactions that match the protocol, it will display the subject.
+
+  This command does the following:
+
+  1. Get encryption data from the wallet.
+  2. Get transaction history for the messaging address.
+  3. Walk through the transactions, looking for an OP_RETURN in the TX.
+  4. If OP_RETURN matches the MSG format, display the subject
+
+
+  It only does this for the first message found, then exists.
+
+  This is just a prototype.
+```
+
+_See code: [src/commands/check-messages.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/check-messages.js)_
 
 ## `encrypt-msg create-wallet`
 
@@ -166,18 +198,24 @@ DESCRIPTION
 
 _See code: [src/commands/derivation.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/derivation.js)_
 
-## `encrypt-msg encrypt-message`
+## `encrypt-msg encrypt-send`
 
 Encrypt a message for another BCH address.
 
 ```
 USAGE
-  $ encrypt-msg encrypt-message
+  $ encrypt-msg encrypt-send
 
 OPTIONS
   -a, --address=address  BCH address to find public key for
-  -f, --file=file        The file you want to encrypt and send. Wrap in double quotes.
-  -n, --name=name        Name of wallet
+
+  -f, --file=file        The file you want to encrypt and send. The file should be placed in the 'packaged-files'
+                         directory.
+
+  -n, --name=name        Name of wallet to pay for BCH fees
+
+  -s, --subject=subject  The 'subject' of the message. Can't be too long, and will not be encrypted. Wrap in double
+                         quotes.
 
 DESCRIPTION
   Given a BCH address, this command will do the following:
@@ -188,7 +226,7 @@ DESCRIPTION
   5. It will pay for the IPFS and BCH messages with the address set using set-key.
 ```
 
-_See code: [src/commands/encrypt-message.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/encrypt-message.js)_
+_See code: [src/commands/encrypt-send.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/encrypt-send.js)_
 
 ## `encrypt-msg get-address`
 
@@ -298,13 +336,13 @@ USAGE
 
 _See code: [src/commands/list-wallets.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/list-wallets.js)_
 
-## `encrypt-msg package-files`
+## `encrypt-msg package-file`
 
 Zips file or directory.
 
 ```
 USAGE
-  $ encrypt-msg package-files
+  $ encrypt-msg package-file
 
 OPTIONS
   -f, --file=file        Path of the file or directory
@@ -316,7 +354,7 @@ DESCRIPTION
   3-Creates a ZIP file with both contents
 ```
 
-_See code: [src/commands/package-files.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/package-files.js)_
+_See code: [src/commands/package-file.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/package-file.js)_
 
 ## `encrypt-msg remove-wallet`
 
