@@ -1,0 +1,18 @@
+*-debug.log
+*-error.log
+/.nyc_output
+/dist
+/tmp
+/yarn.lock
+node_modules
+wallets/*.json
+wallets/deal-with-later/
+/coverage
+orbitdb/
+
+json/
+
+packaged-files/*
+
+# This should come last. The specific files I *do* want to include.
+!packaged-files/README.md
