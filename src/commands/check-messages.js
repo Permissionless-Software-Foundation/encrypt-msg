@@ -1,25 +1,23 @@
 /*
-  Retrieve signals for messages, download messages from IPFS, and decrypt them.
+  Retrieve signals for messages from the blockchain. Displays the subject
+  of each message.
 
   1. Get encryption data from the wallet.
   2. Get transaction history for the messaging address.
   3. Walk through the transactions, looking for an OP_RETURN in the TX.
-  4. If OP_RETURN matches the MSG format, download the message from IPFS.
-  5. Download, decrypt, and display the message.
+  4. If OP_RETURN matches the MSG format, display the subject.
 */
 
 "use strict"
 
 const IPFS_GATEWAY = `https://gateway.temporal.cloud`
 
-const eccrypto = require("eccrypto-js")
-const wif = require("wif")
+const Table = require("cli-table")
 
 const AppUtils = require("../util")
 const GetKey = require("./get-key")
 
 const config = require("../../config")
-const fs = require("fs")
 
 // Mainnet by default.
 const bchjs = new config.BCHLIB({
@@ -31,14 +29,11 @@ const { Command, flags } = require("@oclif/command")
 
 let _this
 
-class DecryptMessages extends Command {
+class CheckMessages extends Command {
   constructor(argv, config) {
     super(argv, config)
 
     this.bchjs = bchjs
-    this.eccrypto = eccrypto
-    this.wif = wif
-    this.fs = fs
 
     this.appUtils = new AppUtils()
     this.getKey = new GetKey(argv, config)
@@ -48,7 +43,7 @@ class DecryptMessages extends Command {
 
   async run() {
     try {
-      const { flags } = this.parse(DecryptMessages)
+      const { flags } = this.parse(CheckMessages)
 
       // Validate input flags
       this.validateFlags(flags)
@@ -61,7 +56,7 @@ class DecryptMessages extends Command {
         })
       }
 
-      await this.getAndDecryptMessages(flags)
+      await this.checkMessages(flags)
     } catch (err) {
       if (err.message) console.log(err.message)
       else console.log(`Error in DecryptMessages.run: `, err)
@@ -69,7 +64,7 @@ class DecryptMessages extends Command {
   }
 
   // Primary function that orchestrates the other subfunctions.
-  async getAndDecryptMessages(flags) {
+  async checkMessages(flags) {
     try {
       // Get the keypair used for encrypted messaging.
       const encryptionInfo = this.getKey.getKey(flags)
@@ -86,108 +81,33 @@ class DecryptMessages extends Command {
       const msgSignal = await this.findMsgSignal(txids)
       // console.log(`msgSignal: ${JSON.stringify(msgSignal, null, 2)}`)
 
-      if (!msgSignal) {
-        console.log(
-          `Encrypted message signal could not be found in transaction history for ${encryptionInfo.bchAddr}`
-        )
-      }
+      if (msgSignal.length === 0)
+        console.log(`No messages found for ${encryptionInfo.bchAddr}`)
 
-      // Pull down the encrypted message from IPFS.
-      const ipfsObj = await this.getIpfsObj(msgSignal)
-      // console.log(`ipfsObj: ${JSON.stringify(ipfsObj, null, 2)}`)
-
-      // Decrypt the message
-      const decryptedMsg = await this.decryptMsg(ipfsObj, encryptionInfo)
-
-      //Write file from buffer
-      const serialNum = Math.floor(100000000 * Math.random())
-      await _this.writeFile(serialNum, decryptedMsg)
-      console.log("File downloaded successfully!")
+      this.displayMsg(msgSignal)
     } catch (err) {
       console.error(`Error in getAndDecryptMessages()`)
       throw err
     }
   }
 
-  // Decrypt the message in the object retrieved from IPFS.
-  async decryptMsg(ipfsObj, encryptionInfo) {
+  // Expects an array of signal objects. Displays them on the console.
+  displayMsg(sigAry) {
     try {
-      // Generate a private key from the WIF for decrypting the data.
-      const privKeyBuf = _this.wif.decode(encryptionInfo.privKey).privateKey
-      // console.log(`private key: ${privKeyBuf.toString("hex")}`)
+      var table = new Table({
+        head: ["Number", "Subject"]
+        // colWidths: [6, 35]
+      })
 
-      if (!ipfsObj.encryptedFile)
-        throw new Error("ipfsObj.encryptedFile not found")
-
-      // Convert the hex encoded message to a buffer
-      const msgBuf = Buffer.from(ipfsObj.encryptedFile, "hex")
-
-      // Convert the bufer into a structured object.
-      const structData = _this.convertToEncryptStruct(msgBuf)
-      // console.log(`structData: `, structData)
-
-      // Decrypt the data with a private key.
-      const fileBuf = await _this.eccrypto.decrypt(privKeyBuf, structData)
-      // _this.log("Decrypted message:")
-      // _this.log(fileBuf.toString())
-
-      return fileBuf
-    } catch (err) {
-      console.error(`Error in decryptMsg()`)
-      throw err
-    }
-  }
-
-  // Converts a serialized buffer containing encrypted data into an object
-  // that can interpreted by the eccryptoJS library.
-  convertToEncryptStruct(encbuf) {
-    try {
-      let offset = 0
-      const tagLength = 32
-      let pub
-      switch (encbuf[0]) {
-        case 4:
-          pub = encbuf.slice(0, 65)
-          break
-        case 3:
-        case 2:
-          pub = encbuf.slice(0, 33)
-          break
-        default:
-          throw new Error(`Invalid type: ${encbuf[0]}`)
+      // Loop through each signal in the array.
+      for (let i = 0; i < sigAry.length; i++) {
+        const tempAry = [i, sigAry[i].subject, ""]
+        table.push(tempAry)
       }
-      offset += pub.length
 
-      const c = encbuf.slice(offset, encbuf.length - tagLength)
-      const ivbuf = c.slice(0, 128 / 8)
-      const ctbuf = c.slice(128 / 8)
-
-      const d = encbuf.slice(encbuf.length - tagLength, encbuf.length)
-
-      return {
-        iv: ivbuf,
-        ephemPublicKey: pub,
-        ciphertext: ctbuf,
-        mac: d
-      }
+      console.log(table.toString())
     } catch (err) {
-      console.error(`Error in convertToEncryptStruct()`)
-      throw err
-    }
-  }
-
-  // Pulls down the JSON object from the IPFS network.
-  async getIpfsObj(ipfsHash) {
-    try {
-      // Use the axios library encapsulated in the IPFS class to make a general
-      // http call to the IPFS gateway.
-      const result = await this.bchjs.IPFS.axios.get(
-        `${IPFS_GATEWAY}/ipfs/${ipfsHash}`
-      )
-
-      return result.data
-    } catch (err) {
-      console.error(`Error in getIpfsObj()`)
+      console.error(`Error in displayMsg()`)
       throw err
     }
   }
@@ -195,6 +115,8 @@ class DecryptMessages extends Command {
   // Given a list of TXIDs, search for a transaction with an OP_RETURN that
   // matches the encrypted messaging signal.
   async findMsgSignal(txids) {
+    const retAry = []
+
     try {
       // Loop through each transaction and look for an encrypted message.
       for (let i = 0; i < txids.length; i++) {
@@ -229,9 +151,40 @@ class DecryptMessages extends Command {
 
         // Return the IPFS hash for the message.
         const msgChunks = msg.split(" ")
-        if (msgChunks[0] === "MSG") return msgChunks[2]
+        // console.log(`msgChunks: ${JSON.stringify(msgChunks, null, 2)}`)
+
+        // Continuing looping if the first part of the OP_RETURN does not match
+        // the specification.
+        if (msgChunks[0] !== "MSG") continue
+
+        // Generate a return object to capture the metadata in the signal.
+        const retObj = {
+          medium: "IPFS"
+        }
+
+        // IPFS used as a medium for transmitting files.
+        if (msgChunks[1] === "IPFS") {
+          retObj.medium = "IPFS"
+          retObj.pointer = msgChunks[2]
+
+          const subjectAry = msgChunks.slice(3, msgChunks.length)
+          retObj.subject = subjectAry.join(" ")
+
+          retAry.push(retObj)
+
+          // console.log(`txData: ${JSON.stringify(txData, null, 2)}`)
+        }
       }
+
+      return retAry
     } catch (err) {
+      // The error is due to rate limits, display the message.
+      if (err.error) {
+        console.error(`Error in findMsgSignal(): `, err.error)
+        return retAry
+      }
+
+      // Otherwise throw the error
       console.error(`Error in findMsgSignal()`)
       throw err
     }
@@ -246,15 +199,14 @@ class DecryptMessages extends Command {
 
     return true
   }
-
   writeFile(fileName, buffer) {
     return new Promise(function(resolve, reject) {
       try {
         // Generate a random filename.
-        const path = `${__dirname}/../../packaged-files/${fileName}.zip`
+        const path = `${__dirname}/../../packaged-files/${fileName}`
         _this.fs.writeFile(path, buffer, function(err) {
           if (err) {
-            console.error(`Error while trying to write ${fileName}.zip`)
+            console.error(`Error while trying to write ${fileName} file.`)
             return reject(err)
           }
           // console.log(`${fileName} written successfully!`)
@@ -270,24 +222,31 @@ class DecryptMessages extends Command {
   }
 }
 
-DecryptMessages.description = `Retrieve and display the encrypted message sent to this wallet.
+CheckMessages.description = `Check for messages on the blockchain
 
-Prototype command for retrieving, decrypting, and displaying a message using
-the Bitcoin Cash blockchain and IPFS. This command does the following:
+This command walks the BCH blockchain for the address set with the set-key command.
+If it finds transactions that match the protocol, it will display the subject.
+
+This command does the following:
 
 1. Get encryption data from the wallet.
 2. Get transaction history for the messaging address.
 3. Walk through the transactions, looking for an OP_RETURN in the TX.
-4. If OP_RETURN matches the MSG format, download the message from IPFS.
-5. Download, decrypt, and display the message.
+4. If OP_RETURN matches the MSG format, display the subject
+
 
 It only does this for the first message found, then exists.
 
 This is just a prototype.
 `
 
-DecryptMessages.flags = {
-  name: flags.string({ char: "n", description: "Name of wallet" })
+CheckMessages.flags = {
+  name: flags.string({ char: "n", description: "Name of wallet" }),
+
+  check: flags.string({
+    char: "c",
+    description: "Number of messages to check (default is 2)"
+  })
 }
 
-module.exports = DecryptMessages
+module.exports = CheckMessages

@@ -61,6 +61,14 @@ class GetPubKey extends Command {
     try {
       const addr = flags.address
 
+      // Determine if this is a testnet address.
+      if (addr.indexOf("bchtest") > -1) {
+        this.bchjs = new config.BCHLIB({
+          restURL: config.TESTNET_REST,
+          apiToken: config.JWT
+        })
+      }
+
       const result = await this.bchjs.encryption.getPubKey(addr)
 
       if (!result.success) {
