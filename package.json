@@ -1,14 +1,14 @@
 {
-  "name": "slp-cli-wallet",
-  "description": "A hacker-friendly, command line BCH and SLP wallet built with bch-js",
-  "version": "2.0.1",
+  "name": "encrypt-msg",
+  "description": "A command-line app for sending and receiving e2e encrypted messages over the BCH blockchain.",
+  "version": "1.0.0",
   "author": "Chris Troutner @christroutner",
   "bin": {
-    "slp-cli-wallet": "./bin/run"
+    "encrypt-msg": "./bin/run"
   },
-  "bugs": "https://github.com/christroutner/slp-cli-wallet/issues",
+  "bugs": "https://github.com/Permissionless-Software-Foundation/encrypt-msg/issues",
   "dependencies": {
-    "@chris.troutner/bch-js": "^2.5.2",
+    "@chris.troutner/bch-js": "^2.5.3",
     "@oclif/command": "^1.5.4",
     "@oclif/config": "^1.9.0",
     "@oclif/plugin-help": "^2.1.3",
@@ -48,7 +48,7 @@
     "/wallets",
     "/config"
   ],
-  "homepage": "https://github.com/christroutner/slp-cli-wallet",
+  "homepage": "https://github.com/Permissionless-Software-Foundation/encrypt-msg",
   "keywords": [
     "oclif"
   ],
@@ -56,12 +56,12 @@
   "main": "src/index.js",
   "oclif": {
     "commands": "./src/commands",
-    "bin": "slp-cli-wallet",
+    "bin": "encrypt-msg",
     "plugins": [
       "@oclif/plugin-help"
     ]
   },
-  "repository": "christroutner/slp-cli-wallet",
+  "repository": "Permissionless-Software-Foundation/encrypt-msg",
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "oclif-dev manifest && oclif-dev readme",

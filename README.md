@@ -2,28 +2,18 @@
 for the most common use-cases. It has been known to burn SLP tokens. Do not use this
 wallet for tokens with value.*
 
-# slp-cli-wallet
+# encrypt-msg
+This is a command-line application for sending and receiving end-to-end (e2e)
+encrypted messages over the Bitcoin Cash (BCH) blockchain. [IPFS](https://ipfs.io) is
+used for passing encrypted content, but the BCH blockchain is used for signaling
+messages.
 
-This is an npm library and Bitcoin Cash (BCH) wallet that runs on the command
-line. Add this library to your app to instantly give it the ability to transact
-on the BCH network! New to Bitcoin Cash? Learn the basics with [Mastering Bitcoin Cash](https://developer.bitcoin.com/mastering-bitcoin-cash/).
+This app is also a fully-fledged HD wallet. It was forked from
+[slp-cli-wallet](https://github.com/christroutner/slp-cli-wallet).
 
-This project has the following goals:
-- Create a code base for a wallet that is easily forkable and extensible by JavaScript developers.
-- Provide a high-level abstraction to make it easy for new developers to add BCH and SLP wallet functionality into their apps.
-
-If you want a wallet with a graphical user interface, check out
-[Badger Wallet](http://badger.bitcoin.com/). BCH functionality is
-implemented in both wallets with [BITBOX](https://developer.bitcoin.com/bitbox), and the command
-line interface for this project is built with [oclif](https://oclif.io).
-
-Also, be sure to check out the design decisions and trade-offs that went into the
-creation of this project in the [docs directory](./docs)
-
-[![Build Status](https://travis-ci.org/christroutner/bch-cli-wallet.svg?branch=master)](https://travis-ci.org/christroutner/bch-cli-wallet) [![Coverage Status](https://coveralls.io/repos/github/christroutner/bch-cli-wallet/badge.svg?branch=master)](https://coveralls.io/github/christroutner/bch-cli-wallet?branch=master) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [![Greenkeeper badge](https://badges.greenkeeper.io/christroutner/bch-cli-wallet.svg)](https://greenkeeper.io/)
 
 <!-- toc -->
-* [slp-cli-wallet](#slp-cli-wallet)
+* [encrypt-msg](#encrypt-msg)
 * [NPM Usage](#npm-usage)
 * [Install Dev Environment](#install-dev-environment)
 * [Command Line Usage](#command-line-usage)
