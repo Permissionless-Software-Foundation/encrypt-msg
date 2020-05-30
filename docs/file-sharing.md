@@ -53,3 +53,10 @@ In email, recipients must provide the sender with their public key. The sender t
 Any time a Bitcoin Cash address **sends** money, their public key is recorded on the blockchain. This is a core, primitive part of the Bitcoin protocol. This key can be retrieved by the sender *without any need for communication with the recipient*. This eliminates the source of friction experienced in the email use-case.
 
 However, unless the recipient has initiated **at least one transaction**, their public key will not exist on the blockchain and it can not be retrieved. This is an important initialization step that wallets implementing this specification need to be aware of.
+
+## Appendix 1
+### Message Encryption and Delivery Workflow
+
+- [Dia diagram file](e2e-pt2-flow.dia)
+
+![e2e-pt2-flow.png](e2e-pt2-flow.png)
