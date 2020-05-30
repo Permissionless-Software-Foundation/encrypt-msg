@@ -115,6 +115,7 @@ class DecryptMessages extends Command {
       // Generate a private key from the WIF for decrypting the data.
       const privKeyBuf = _this.wif.decode(encryptionInfo.privKey).privateKey
       // console.log(`private key: ${privKeyBuf.toString("hex")}`)
+
       if (!ipfsObj.encryptedFile)
         throw new Error("ipfsObj.encryptedFile not found")
 
@@ -123,6 +124,7 @@ class DecryptMessages extends Command {
 
       // Convert the bufer into a structured object.
       const structData = _this.convertToEncryptStruct(msgBuf)
+      // console.log(`structData: `, structData)
 
       // Decrypt the data with a private key.
       const fileBuf = await _this.eccrypto.decrypt(privKeyBuf, structData)
@@ -244,14 +246,15 @@ class DecryptMessages extends Command {
 
     return true
   }
+
   writeFile(fileName, buffer) {
     return new Promise(function(resolve, reject) {
       try {
         // Generate a random filename.
-        const path = `${__dirname}/../../packaged-files/${fileName}`
+        const path = `${__dirname}/../../packaged-files/${fileName}.zip`
         _this.fs.writeFile(path, buffer, function(err) {
           if (err) {
-            console.error(`Error while trying to write ${fileName} file.`)
+            console.error(`Error while trying to write ${fileName}.zip`)
             return reject(err)
           }
           // console.log(`${fileName} written successfully!`)

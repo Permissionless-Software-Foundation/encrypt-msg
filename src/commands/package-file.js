@@ -21,7 +21,7 @@ const path = require("path")
 
 let _this
 
-class EncryptMessage extends Command {
+class PackageFile extends Command {
   constructor(argv, config) {
     super(argv, config)
 
@@ -38,7 +38,7 @@ class EncryptMessage extends Command {
 
   async run() {
     try {
-      const { flags } = this.parse(EncryptMessage)
+      const { flags } = this.parse(PackageFile)
 
       // Validate input flags
       this.validateFlags(flags)
@@ -267,13 +267,13 @@ class EncryptMessage extends Command {
   }
 }
 
-EncryptMessage.description = `Zips file or directory.
+PackageFile.description = `Zips file or directory.
 1-Copies the file or the specified directory
 2-Exports the message in a JSON file
 3-Creates a ZIP file with both contents
 `
 
-EncryptMessage.flags = {
+PackageFile.flags = {
   file: flags.string({
     char: "f",
     description: "Path of the file or directory"
@@ -285,4 +285,4 @@ EncryptMessage.flags = {
   })
 }
 
-module.exports = EncryptMessage
+module.exports = PackageFile

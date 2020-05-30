@@ -26,7 +26,7 @@ const { Command, flags } = require("@oclif/command")
 const inputPath = `${__dirname}/../../packaged-files`
 let _this
 
-class EncryptMessage extends Command {
+class EncryptSend extends Command {
   constructor(argv, config) {
     super(argv, config)
 
@@ -44,7 +44,7 @@ class EncryptMessage extends Command {
 
   async run() {
     try {
-      const { flags } = this.parse(EncryptMessage)
+      const { flags } = this.parse(EncryptSend)
 
       // Validate input flags
       this.validateFlags(flags)
@@ -496,7 +496,7 @@ class EncryptMessage extends Command {
   }
 }
 
-EncryptMessage.description = `Encrypt a message for another BCH address.
+EncryptSend.description = `Encrypt a message for another BCH address.
 
 Given a BCH address, this command will do the following:
 1. It will search the blockchain for the public key associated with the address.
@@ -506,7 +506,7 @@ Given a BCH address, this command will do the following:
 5. It will pay for the IPFS and BCH messages with the address set using set-key.
 `
 
-EncryptMessage.flags = {
+EncryptSend.flags = {
   address: flags.string({
     char: "a",
     description: "BCH address to find public key for"
@@ -530,4 +530,4 @@ EncryptMessage.flags = {
   })
 }
 
-module.exports = EncryptMessage
+module.exports = EncryptSend

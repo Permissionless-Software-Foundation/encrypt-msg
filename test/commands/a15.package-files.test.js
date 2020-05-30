@@ -6,7 +6,7 @@
 
 const assert = require("chai").assert
 const fs = require("fs")
-const PackageFiles = require("../../src/commands//package-files")
+const PackageFiles = require("../../src/commands/package-file")
 const packageFiles = new PackageFiles()
 const path = require("path")
 
