@@ -1,7 +1,3 @@
-*Warning: This is an experimental 'hacker-friendly' wallet. It has been tested only
-for the most common use-cases. It has been known to burn SLP tokens. Do not use this
-wallet for tokens with value.*
-
 # encrypt-msg
 This is a command-line application for sending and receiving end-to-end (e2e)
 encrypted messages over the Bitcoin Cash (BCH) blockchain. [IPFS](https://ipfs.io) is
@@ -13,6 +9,7 @@ messages.
 - This app is also a fully-fledged HD wallet. It was forked from
 [slp-cli-wallet](https://github.com/christroutner/slp-cli-wallet).
 
+## Table of Contents
 <!-- toc -->
 * [encrypt-msg](#encrypt-msg)
 * [Install Dev Environment](#install-dev-environment)
@@ -38,10 +35,10 @@ by making changes to the code in the [src/commands](src/commands) directory.
 There are a few main commands for sending and receiving message.
 - create-wallet - to create a wallet.
 - set-key - to generate a private/public key pair for encrypting messages.
-- package-files - zip up files and messages into a single file.
-- encrypt-message - encrypt the zip file, upload it to IPFS, and signal the BCH address that they have a message.
-- check-message - see if there are any messages for your address.
-- decrypt-message - download file from IPFS and decrypt it.
+- packag-file - zip up files and messages into a single file.
+- encrypt-send - encrypt the zip file, upload it to IPFS, and signal the BCH address that they have a message.
+- check-messages - see if there are any messages for your address.
+- decrypt-messages - download file from IPFS and decrypt it.
 
 # Command Line Usage
 <!-- usage -->
