@@ -139,7 +139,12 @@ class EncryptMessage extends Command {
       // console.log(`ipfsHash: ${ipfsHash}`)
 
       // Create a memo.cash protocol transaction to signal message to recipient.
-      const signalHex = await _this.signalMessage(fundingInfo, ipfsHash, toAddr)
+      const signalHex = await _this.signalMessage(
+        fundingInfo,
+        ipfsHash,
+        toAddr,
+        flags.subject
+      )
       // console.log(`signalHex: `, signalHex)
 
       // Broadcast the signal to the recipient.
@@ -266,7 +271,7 @@ class EncryptMessage extends Command {
     }
   }
 
-  async signalMessage(fundingInfo, ipfsHash, toAddr) {
+  async signalMessage(fundingInfo, ipfsHash, toAddr, subject) {
     try {
       console.log(`fundingInfo: ${JSON.stringify(fundingInfo, null, 2)}`)
       console.log(`ipfsHash: ${JSON.stringify(ipfsHash, null, 2)}`)
@@ -311,7 +316,7 @@ class EncryptMessage extends Command {
       const script = [
         _this.bchjs.Script.opcodes.OP_RETURN,
         Buffer.from("6d02", "hex"),
-        Buffer.from(`MSG IPFS ${ipfsHash}`)
+        Buffer.from(`MSG IPFS ${ipfsHash} ${subject}`)
       ]
 
       // console.log(`script: ${util.inspect(script)}`);
@@ -518,8 +523,8 @@ EncryptMessage.flags = {
     description: "Name of wallet to pay for BCH fees"
   }),
 
-  message: flags.string({
-    char: "m",
+  subject: flags.string({
+    char: "s",
     description:
       "The 'subject' of the message. Can't be too long, and will not be encrypted. Wrap in double quotes."
   })
