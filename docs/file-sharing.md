@@ -1,7 +1,7 @@
-# Bitcoin File Sharing Protocol Specification
+# Media Sharing Protocol Specification
 
 ### Specification version: 0.0
-### Date orginally published: May 30, 2020
+### Date originally published: May 30, 2020
 
 ## Authors
 Chris Troutner
@@ -11,7 +11,7 @@ Chris Troutner
 - The [Memo Protocol](https://memo.cash/protocol) used by [Memo.cash](https://memo.cash) is used here as the base protocol.
 
 ## 1. Introduction
-The following presents a simple protocol for sharing files both on-chain and off-chain with people using a Bitcoin Cash address as an identity. This specification defines a system that functions very much like email, using Bitcoin Cash addresses in place of an email address. It defines how to pass arbitrary messages and files of any size to the recipient. This content can end-to-end (e2e) encrypted with the recipients public key, which means only the person holding the private key for that Bitcoin Cash address can decrypt the content.
+The following presents a simple protocol for sharing files both on-chain and off-chain with people using a Bitcoin Cash address as an identity. This specification defines a system that functions very much like email, using Bitcoin Cash addresses in place of an email address. It defines how to pass arbitrary messages and files of any size to the recipient. This content can be end-to-end (e2e) encrypted with the recipients public key, which means only the person holding the private key for that Bitcoin Cash address can decrypt the content.
 
 For very small content (less than 10kB), on-chain data can be transmitted via the [Bitcoin Files Protocol](https://github.com/simpleledger/slp-specifications/blob/master/bitcoinfiles.md). Content of any size can be shared off-chain via the [Inter-Planetary File System](https://ipfs.io) (IPFS).
 
@@ -39,3 +39,15 @@ Here is another example indicating an on-chain message using the [Bitcoin Files 
 ### 2.2 Message Signaling
 
 An on-chain signal is required to allow wallets to detect that they have a message waiting for them. In addition to the data in the OP_RETURN, a dust output is sent to the recipients address. This will cause the transaction to appear in the transaction history for the address. Wallets can easily crawl their transaction history to find transactions with the above OP_RETURN payload.
+
+## 3. Encryption
+
+The protocol can be used with or without encryption. However, the Bitcoin protocol naturally allows for end-to-end (e2e) encryption to be implemented, far easier than is currently done in email. Bitcoin payments naturally use Eliptic Curve cryptography. This aspect of the Bitcoin protocol can be leveraged to encrypt the content of messages as well.
+
+### 3.1 Public Keys
+
+In email, recipients must provide the sender with their public key. The sender then encrypts the message with that public key before sending the message. This key passing is a large source of friction and largely explains why attempts to implement widespread encryption in email has been a failed effort. Key servers are available to reduce this friction, but they require additional training by the users.
+
+Any time a Bitcoin Cash address **sends** money, their public key is recorded on the blockchain. This is core, primitive part of the Bitcoin protocol. This key can be retrieved by the sender *without any need for communication with the recipient*. This eliminates the source of friction experienced in the email use-case.
+
+However, unless the recipient has initiated **at least one transaction**, their public key will not exist on the blockchain and it can not be retrieved.
