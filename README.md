@@ -468,5 +468,3 @@ OPTIONS
 
 _See code: [src/commands/update-balances.js](https://github.com/Permissionless-Software-Foundation/encrypt-msg/blob/v1.0.0/src/commands/update-balances.js)_
 <!-- commandsstop -->
-
-a
