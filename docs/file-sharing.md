@@ -24,21 +24,23 @@ The OP_RETURN of a Bitcoin Cash transaction is used to point to the message payl
 
 The message follows this pattern:
 
-`MSG <medium> <pointer> <subject>`
+- `MSG <medium> <pointer> <subject>`
 
-For example, here is a message indicating an off-chain message using IPFS as the content-deliver medium:
+For example, here is a message indicating an off-chain message using IPFS as the content-delivery medium:
 
 - `MSG IPFS QmT17Px3WcydqbZnKGUkKb5tWTM7Ypoz1UJ1MHWngC49xQ A message for you`
 
-The *medium* above is specified as IPFS. The *pointer* is the IPFS hash needed to retrieve the content from the IPFS network. The rest of the signal is a *subject* message, similar to an email subject. The subject can be of any length
+The *medium* above is specified as IPFS. The *pointer* is the IPFS hash needed to retrieve the content from the IPFS network. The rest of the signal is a *subject* message, similar to an email subject. The subject can be of any length, as long as it fits within the constraints of the OP_RETURN.
 
 Here is another example indicating an on-chain message using the [Bitcoin Files Protocol](https://github.com/simpleledger/slp-specifications/blob/master/bitcoinfiles.md) protocol:
 
-- `MSG BCH bitcoinfile:2f2add68a365da4cae325e4d4a0f6a57ddffd3446a6dc3bf5b32f6ae9f0f48ff Another message`
+- `MSG BFP bitcoinfile:2f2add68a365da4cae325e4d4a0f6a57ddffd3446a6dc3bf5b32f6ae9f0f48ff Another subject message`
 
 ### 2.2 Message Signaling
 
 An on-chain signal is required to allow wallets to detect that they have a message waiting for them. In addition to the data in the OP_RETURN, a dust output is sent to the recipients address. This will cause the transaction to appear in the transaction history for the address. Wallets can easily crawl their transaction history to find transactions with the above OP_RETURN payload.
+
+- [Here is an example of a transaction on the block explorer](https://explorer.bitcoin.com/bch/tx/65395fe21e1add6bfb249f6ad108834734b0f71379b67a222f4144cbb39dfa32). The recipient is bitcoincash:qzxk8ecxm6drkcjtkrepesx5dd45fsvjauvxeeynfy.
 
 ## 3. Encryption
 
@@ -48,6 +50,6 @@ The protocol can be used with or without encryption. However, the Bitcoin protoc
 
 In email, recipients must provide the sender with their public key. The sender then encrypts the message with that public key before sending the message. This key passing is a large source of friction and largely explains why attempts to implement widespread encryption in email has been a failed effort. Key servers are available to reduce this friction, but they require additional training by the users.
 
-Any time a Bitcoin Cash address **sends** money, their public key is recorded on the blockchain. This is core, primitive part of the Bitcoin protocol. This key can be retrieved by the sender *without any need for communication with the recipient*. This eliminates the source of friction experienced in the email use-case.
+Any time a Bitcoin Cash address **sends** money, their public key is recorded on the blockchain. This is a core, primitive part of the Bitcoin protocol. This key can be retrieved by the sender *without any need for communication with the recipient*. This eliminates the source of friction experienced in the email use-case.
 
-However, unless the recipient has initiated **at least one transaction**, their public key will not exist on the blockchain and it can not be retrieved.
+However, unless the recipient has initiated **at least one transaction**, their public key will not exist on the blockchain and it can not be retrieved. This is an important initialization step that wallets implementing this specification need to be aware of.
