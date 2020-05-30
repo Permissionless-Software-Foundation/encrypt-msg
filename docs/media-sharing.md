@@ -59,4 +59,6 @@ However, unless the recipient has initiated **at least one transaction**, their 
 
 - [Dia diagram file](e2e-pt2-flow.dia)
 
+This diagram shows the workflow associated with 'Alice' to send an e2e encrypted message to 'Bob' using the encrypt-msg app. This diagram is covered in detail in [this YouTube video](https://www.youtube.com/watch?v=RB9yt65y9s8).
+
 ![e2e-pt2-flow.png](e2e-pt2-flow.png)

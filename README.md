@@ -8,12 +8,15 @@ encrypted messages over the Bitcoin Cash (BCH) blockchain. [IPFS](https://ipfs.i
 used for passing encrypted content, but the BCH blockchain is used for signaling
 messages.
 
-This app is also a fully-fledged HD wallet. It was forked from
+- See the [Documentation](docs/README.md) for a list of media and the specification this application aspires implement.
+
+- This app is also a fully-fledged HD wallet. It was forked from
 [slp-cli-wallet](https://github.com/christroutner/slp-cli-wallet).
 
 <!-- toc -->
 * [encrypt-msg](#encrypt-msg)
 * [Install Dev Environment](#install-dev-environment)
+* [How To Use](#how-to-use)
 * [Command Line Usage](#command-line-usage)
 * [Commands](#commands)
 <!-- tocstop -->
