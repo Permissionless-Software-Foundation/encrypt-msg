@@ -6,6 +6,8 @@ messages.
 
 - See the [Documentation](docs/README.md) for a list of media and the specification this application aspires implement.
 
+- [This YouTube video demos this software](https://youtu.be/garL1s-NsPY)
+
 - This app is also a fully-fledged HD wallet. It was forked from
 [slp-cli-wallet](https://github.com/christroutner/slp-cli-wallet).
 
@@ -14,6 +16,7 @@ messages.
 * [encrypt-msg](#encrypt-msg)
 * [Install Dev Environment](#install-dev-environment)
 * [How to Use](#how-to-use)
+* [Releases](#releases)
 * [Command Line Usage](#command-line-usage)
 * [Commands](#commands)
 <!-- tocstop -->
@@ -39,6 +42,11 @@ There are a few main commands for sending and receiving message.
 - encrypt-send - encrypt the zip file, upload it to IPFS, and signal the BCH address that they have a message.
 - check-messages - see if there are any messages for your address.
 - decrypt-messages - download file from IPFS and decrypt it.
+
+# Releases
+
+- v1.0.2 via IPFS (code only): https://cloudflare-ipfs.com/ipfs/QmRT3WYi79j1Np7nRwv1U4VKnU2dtS2cc5goNmxEJsxwAx
+- v1.0.2 via IPFS (code and dependencies): https://cloudflare-ipfs.com/ipfs/QmXgvqN1HY3qxaCGnVVhda9jHGrAbUyh7oTkwjxxRXnVps
 
 # Command Line Usage
 <!-- usage -->
