@@ -7,6 +7,8 @@
 There are several piece of media that have been generated around this app. They presented here in reverse chronological order (newest first).
 
 
+- [Introduction to the Media Sharing Protocol Specification](https://www.youtube.com/watch?v=garL1s-NsPY) walks through the [Media Sharing Protocol Specification](./media-sharing.md) and how to use the [encrypt-msg](https://github.com/Permissionless-Software-Foundation/encrypt-msg) command line app.
+
 - [Uncensorable Encrypted Messaging using BCH and IPFS](https://www.youtube.com/watch?v=RB9yt65y9s8) is a 'Part 2' YouTube video that extends the first video. It demonstrates the ability to use IPFS to move data off-chain, allow it to scale to any size, and possibly be self-destructing after a period of time. Showed off the [IPFS hosting service on FullStack.cash](https://ipfs.fullstack.cash).
 
 - [CoinSpice.io Podcast](https://coinspice.io/news/podcast-bitcoin-cash-devs-prepper-mentality-makes-him-ready-for-cryptos-privacy-future/) discussed the political crackdown on end-to-end encryption via the EARN IT act, and how Bitcoin-based e2e encryption as a solution to government overreach.
