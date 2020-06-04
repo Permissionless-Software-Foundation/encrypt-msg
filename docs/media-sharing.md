@@ -1,6 +1,6 @@
 # Media Sharing Protocol Specification
 
-### Specification version: 0.0
+### Specification version: 1.0.0
 ### Date originally published: May 30, 2020
 
 ## Authors
