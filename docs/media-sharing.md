@@ -1,6 +1,6 @@
 # Media Sharing Protocol Specification
 
-### Specification version: 1.0.0
+### Specification version: 1.0.1
 ### Date originally published: May 30, 2020
 
 ## Authors
@@ -41,6 +41,12 @@ Here is another example indicating an on-chain message using the [Bitcoin Files 
 An on-chain signal is required to allow wallets to detect that they have a message waiting for them. In addition to the data in the OP_RETURN, a dust output is sent to the recipients address. This will cause the transaction to appear in the transaction history for the address. Wallets can easily crawl their transaction history to find transactions with the above OP_RETURN payload.
 
 - [Here is an example of a transaction on the block explorer](https://explorer.bitcoin.com/bch/tx/65395fe21e1add6bfb249f6ad108834734b0f71379b67a222f4144cbb39dfa32). The recipient is bitcoincash:qzxk8ecxm6drkcjtkrepesx5dd45fsvjauvxeeynfy.
+
+### 2.3 Spam Prevention
+
+The on-chain signal to the recipient is a standard dust output (546 satoshis). But it is not required to be dust. It can be any amount of satoshis more than dust.
+
+If a threshold amount of satoshis is set by the end user, this feature can be used as spam prevention. Any messages not meeting the threshold can be ignored by the wallet.
 
 ## 3. Encryption
 
