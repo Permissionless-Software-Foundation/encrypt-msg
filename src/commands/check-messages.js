@@ -10,7 +10,7 @@
 
 "use strict"
 
-const IPFS_GATEWAY = `https://gateway.temporal.cloud`
+// const IPFS_GATEWAY = `https://gateway.temporal.cloud`
 
 const Table = require("cli-table")
 
@@ -115,11 +115,17 @@ class CheckMessages extends Command {
   // Given a list of TXIDs, search for a transaction with an OP_RETURN that
   // matches the encrypted messaging signal.
   async findMsgSignal(txids) {
+    // console.log(`txids: ${JSON.stringify(txids, null, 2)}`)
+
     const retAry = []
 
     try {
+      // Limit the number of transactions to check.
+      let limit = 10
+      if (txids.length < limit) limit = txids.length
+
       // Loop through each transaction and look for an encrypted message.
-      for (let i = 0; i < txids.length; i++) {
+      for (let i = 0; i < limit; i++) {
         const thisTxid = txids[i]
 
         const txData = await this.bchjs.RawTransactions.getRawTransaction(
