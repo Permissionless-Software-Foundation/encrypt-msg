@@ -97,12 +97,13 @@ class DecryptMessages extends Command {
       // console.log(`ipfsObj: ${JSON.stringify(ipfsObj, null, 2)}`)
 
       // Decrypt the message
-      const decryptedMsg = await this.decryptMsg(ipfsObj, encryptionInfo)
+      await this.decryptMsg(ipfsObj, encryptionInfo)
+      // const decryptedMsg = await this.decryptMsg(ipfsObj, encryptionInfo)
 
       //Write file from buffer
-      const serialNum = Math.floor(100000000 * Math.random())
-      await _this.writeFile(serialNum, decryptedMsg)
-      console.log("File downloaded successfully!")
+      // const serialNum = Math.floor(100000000 * Math.random())
+      // await _this.writeFile(serialNum, decryptedMsg)
+      // console.log(`File downloaded successfully: ${serialNum}`)
     } catch (err) {
       console.error(`Error in getAndDecryptMessages()`)
       throw err
@@ -111,16 +112,18 @@ class DecryptMessages extends Command {
 
   // Decrypt the message in the object retrieved from IPFS.
   async decryptMsg(ipfsObj, encryptionInfo) {
+    console.log(`ipfsObj: ${JSON.stringify(ipfsObj, null, 2)}`)
+    console.log(`encryptionInfo: ${JSON.stringify(encryptionInfo, null, 2)}`)
+
     try {
       // Generate a private key from the WIF for decrypting the data.
       const privKeyBuf = _this.wif.decode(encryptionInfo.privKey).privateKey
       // console.log(`private key: ${privKeyBuf.toString("hex")}`)
 
-      if (!ipfsObj.encryptedFile)
-        throw new Error("ipfsObj.encryptedFile not found")
+      if (!ipfsObj.message) throw new Error("ipfsObj.encryptedFile not found")
 
       // Convert the hex encoded message to a buffer
-      const msgBuf = Buffer.from(ipfsObj.encryptedFile, "hex")
+      const msgBuf = Buffer.from(ipfsObj.message, "hex")
 
       // Convert the bufer into a structured object.
       const structData = _this.convertToEncryptStruct(msgBuf)
@@ -128,8 +131,8 @@ class DecryptMessages extends Command {
 
       // Decrypt the data with a private key.
       const fileBuf = await _this.eccrypto.decrypt(privKeyBuf, structData)
-      // _this.log("Decrypted message:")
-      // _this.log(fileBuf.toString())
+      _this.log("Decrypted message:")
+      _this.log(fileBuf.toString())
 
       return fileBuf
     } catch (err) {
@@ -196,6 +199,10 @@ class DecryptMessages extends Command {
   // matches the encrypted messaging signal.
   async findMsgSignal(txids) {
     try {
+      // Limit the number of transactions to check.
+      let limit = 10
+      if (txids.length < limit) limit = txids.length
+
       // Loop through each transaction and look for an encrypted message.
       for (let i = 0; i < txids.length; i++) {
         const thisTxid = txids[i]
