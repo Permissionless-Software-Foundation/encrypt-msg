@@ -124,11 +124,12 @@ class SetKey extends Command {
       // derive an external change address HDNode
       const change = this.BITBOX.HDNode.derivePath(
         account,
-        `0/${walletInfo.nextAddress}`
+        // `0/${walletInfo.nextAddress}`
+        `0/0`
       )
 
       // Increment to point to a new address for next time.
-      walletInfo.nextAddress++
+      // walletInfo.nextAddress++
 
       // Update the wallet file.
       await appUtils.saveWallet(filename, walletInfo)
